@@ -1,12 +1,14 @@
 from src.core.scene.scene import Scene
 from src.core.tool.draw import draw_text
 from src.core.scene.save_scene import *
+from src.core.map.ground import Ground
 from pygame import KEYDOWN
 
 class GameScene(Scene):
     def __init__(self):
         super().__init__()
         self.scene_manager = get_scene('manager')
+        self.ground_map = Ground()
 
     def on_enter(self):
         print('进入游戏')
