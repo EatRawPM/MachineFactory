@@ -9,17 +9,17 @@ import pygame
 
 save_init()
 
-set_scene('manager', SceneManager())
-set_scene('menu', MenuScene())
-set_scene('run', RunScene())
-set_scene('game', GameScene())
-
 class App:
     def __init__(self):
         pygame.init()
         pygame.display.set_mode((1280, 720))
         pygame.display.set_caption('MachineFactory')
         pygame.display.set_icon(icon_image)
+
+        set_scene('manager', SceneManager())
+        set_scene('menu', MenuScene())
+        set_scene('run', RunScene())
+        set_scene('game', GameScene())
 
         self.surface_display = pygame.display.get_surface()
 

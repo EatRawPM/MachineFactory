@@ -3,10 +3,14 @@ from src.core.tool.draw import draw_text
 from src.core.scene.save_scene import *
 from src.core.map.ground import Ground
 from pygame import KEYDOWN
+import pygame
+
+pygame.init()
 
 class GameScene(Scene):
     def __init__(self):
         super().__init__()
+        self.surface = pygame.display.get_surface()
         self.scene_manager = get_scene('manager')
         self.ground_map = Ground()
 
@@ -18,10 +22,12 @@ class GameScene(Scene):
 
     def on_input(self, event):
         if event.type == KEYDOWN:
-            self.scene_manager.switch_scene('menu')
+            pass
+        self.ground_map.on_input(event)
 
     def on_draw(self):
-        draw_text('游戏绘图')
+        self.surface.fill('white')
+        self.ground_map.on_draw()
 
     def on_exit(self):
         print('退出游戏')
