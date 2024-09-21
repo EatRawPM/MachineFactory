@@ -1,75 +1,68 @@
 import pygame
 from src.core.map.map import Map
+from src.core.entity.player import Player
 from pygame.math import Vector2 as vec2
 
 class Ground(Map):
     def __init__(self):
         super().__init__()
-        self.surface = pygame.display.get_surface()
+        #窗口
+        self.display_surface = pygame.display.get_surface()
+        self.width = self.display_surface.get_width()
+        self.height = self.display_surface.get_height()
 
-        self.origin = vec2(0, 0)
-        self.direction = vec2(0, 0)
-        self.speed = 20
+        self.half_width = self.width / 2
+        self.half_height = self.height / 2
 
-        self.yan = vec2(1280 / 2, 720 / 2)
-
-        self.origins = 1.0
-        self.size = int(64 * self.origins)
-
-        self.z_y = 720 - (self.yan.y + self.size / 2)
-        self.f_y = self.yan.y - self.size / 2
-
-        self.z_x = 1280 - (self.yan.x + self.size / 2)
-        self.f_x = self.yan.x - self.size / 2
-
-        self.is_create = False
+        #模式
+        self.is_create = True
         self.is_delete = False
+
+        self.scale = 1.0
+
+        self.size = 64
+
+        self.origin = vec2(self.half_width, self.half_height)
+
+        self.offset = vec2(0, 0)
+
+        self.player = Player()
+
     def on_enter(self): ...
-    def draw_lines(self, color: str):
-        for i in range(int(self.z_y / self.size + 1)):
-            pygame.draw.line(self.surface, color, (0, self.yan.y + self.size / 2 + i * self.size), (1280, self.yan.y + self.size / 2 + i * self.size))
-        for i in range(int(self.f_y / self.size + 1)):
-            pygame.draw.line(self.surface, color, (0, self.yan.y - self.size / 2 - i * self.size), (1280, self.yan.y - self.size / 2 - i * self.size))
 
-        for i in range(int(self.z_x / self.size + 1)):
-            pygame.draw.line(self.surface, color, (self.yan.x + self.size / 2 + i * self.size, 0), (self.yan.x + self.size / 2 + i * self.size, 720))
-        for i in range(int(self.f_x / self.size + 1)):
-            pygame.draw.line(self.surface, color, (self.yan.x - self.size / 2 - i * self.size, 0), (self.yan.x - self.size / 2 - i * self.size, 720))
-    def on_update(self):
-        self.origin += self.direction
-        self.size = int(64 * self.origins)
-
-        self.z_y = 720 - (self.yan.y + self.size / 2)
-        self.f_y = self.yan.y - self.size / 2
-
-        self.z_x = 1280 - (self.yan.x + self.size / 2)
-        self.f_x = self.yan.x - self.size / 2
-
-        self.yan = vec2(1280 / 2, 720 / 2) + (-self.origin * self.speed)
     def on_draw(self):
         if self.is_create:
-            pygame.draw.circle(self.surface, 'green', self.yan, 10)
+            pygame.draw.circle(self.display_surface, 'green', self.origin, 10*self.scale)
             self.draw_lines('black')
         if self.is_delete:
-            pygame.draw.circle(self.surface, 'red', self.yan, 10)
+            pygame.draw.circle(self.display_surface, 'red', self.origin, 10*self.scale)
             self.draw_lines('red')
+        self.player.draw()
+
+    def draw_lines(self, color):
+        cols = self.width // self.size
+        rows = self.height // self.size
+
+        offset_offset = vec2(x = self.origin.x - int(self.origin.x / self.size) * self.size,
+                             y = self.origin.y - int(self.origin.y / self.size) * self.size)
+
+        for col in range(cols):
+            x = (offset_offset.x + self.size / 2) + col * self.size
+            pygame.draw.line(self.display_surface, color, (x, 0), (x, self.height))
+
+        for row in range(rows):
+            y = (offset_offset.y + self.size / 2) + row * self.size
+            pygame.draw.line(self.display_surface, color, (0, y), (self.width, y))
+
+    def on_update(self):
+        self.size = int(64 * self.scale)
+        self.offset = (-self.player.x, -self.player.y)
+
+        self.origin = vec2(self.half_width, self.half_height) + self.offset
+
+        self.player.update(self.scale, self.size)
+
     def on_input(self, event):
-        def input():
-            keys = pygame.key.get_pressed()
-
-            if keys[pygame.K_w]:
-                self.direction.y = -1
-            elif keys[pygame.K_s]:
-                self.direction.y = 1
-            else:
-                self.direction.y = 0
-
-            if keys[pygame.K_a]:
-                self.direction.x = -1
-            elif keys[pygame.K_d]:
-                self.direction.x = 1
-            else:
-                self.direction.x = 0
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_e:
                 if self.is_create:
@@ -83,12 +76,12 @@ class Ground(Map):
                 else:
                     self.is_delete = True
                     self.is_create = False
+        self.player.input()
+        self.scale_event(event)
+
+    def scale_event(self,event):
         if event.type == pygame.MOUSEWHEEL:
-            if self.origins <= 0.5 and event.y == -1:
-                self.origins = 0.5
-            elif self.origins >= 2.0 and event.y == 1:
-                self.origins = 2.0
-            else:
-                self.origins += event.y * 0.25
-        input()
+            self.scale += event.y * 0.25
+        self.scale = max(0.5, min(self.scale, 2.0))
+
     def on_exit(self): ...
