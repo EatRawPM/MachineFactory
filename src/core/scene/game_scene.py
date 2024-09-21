@@ -15,14 +15,12 @@ class GameScene(Scene):
         self.ground_map = Ground()
 
     def on_enter(self):
-        print('进入游戏')
+        self.ground_map.on_enter()
 
     def on_update(self):
-        print('游戏正在运行')
+        self.ground_map.on_update()
 
     def on_input(self, event):
-        if event.type == KEYDOWN:
-            pass
         self.ground_map.on_input(event)
 
     def on_draw(self):
@@ -30,4 +28,4 @@ class GameScene(Scene):
         self.ground_map.on_draw()
 
     def on_exit(self):
-        print('退出游戏')
+        self.ground_map.on_exit()
