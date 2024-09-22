@@ -1,9 +1,8 @@
 from src.core.scene.run_scene import RunScene
 from src.core.scene.menu_scene import MenuScene
 from src.core.scene.game_scene import GameScene
-from src.core.scene.scene_manager import SceneManager
-from src.core.scene.save_scene import *
-from src.core.objects.animations.animation import Animation
+from src.core.scene.core.scene_manager import SceneManager
+from src.core.scene.core.save_scene import *
 from src.data.assets import icon_image
 import sys
 import pygame

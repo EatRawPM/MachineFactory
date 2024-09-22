@@ -1,6 +1,6 @@
-from src.core.scene.scene import Scene
+from src.core.scene.core.scene import Scene
 from src.core.tool.draw import draw_text
-from src.core.scene.save_scene import *
+from src.core.scene.core.save_scene import *
 from pygame import KEYDOWN
 
 class MenuScene(Scene):

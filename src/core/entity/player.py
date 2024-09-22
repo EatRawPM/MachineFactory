@@ -1,7 +1,7 @@
 from pygame.math import Vector2 as vec2
 from pygame.draw import circle
 from src.core.tool.draw import draw_text
-from src.core.entity.entity import Entity
+from src.core.entity.core.entity import Entity
 import pygame
 
 class Player(Entity):

@@ -1,5 +1,5 @@
 import pygame
-from src.core.map.map import Map
+from src.core.map.core.map import Map
 from src.core.entity.player import Player
 from pygame.math import Vector2 as vec2
 
