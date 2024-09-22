@@ -56,11 +56,13 @@ class Ground(Map):
 
     def on_update(self):
         self.size = int(64 * self.scale)
-        self.offset = (-self.player.x, -self.player.y)
+        self.offset = vec2(-self.player.x, -self.player.y)
 
-        self.origin = vec2(self.half_width, self.half_height) + self.offset
+        scale_offset = vec2(self.offset.x * self.scale, self.offset.y * self.scale)
 
-        self.player.update(self.scale, self.size)
+        self.origin = vec2(self.half_width, self.half_height) + scale_offset
+
+        self.player.update(self.scale)
 
     def on_input(self, event):
         if event.type == pygame.KEYDOWN:

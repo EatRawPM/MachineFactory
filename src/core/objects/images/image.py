@@ -4,7 +4,7 @@ from pygame.sprite import Sprite
 from pygame.transform import scale
 
 class Image(Sprite):
-    def __init__(self, screen, path: str | SurfaceType, size: tuple[float, float] = None, x: int=0, y: int=0):
+    def __init__(self, screen: SurfaceType, path: str | SurfaceType, size: tuple[float, float] = None, x: int=0, y: int=0):
         super().__init__()
         self.screen = screen
         if type(path) == SurfaceType:
