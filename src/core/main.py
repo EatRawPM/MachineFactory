@@ -40,7 +40,6 @@ class App:
     def handle_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.scene_manager.on_exit()
                 pygame.quit()
                 sys.exit()
             self.scene_manager.on_input(event)

@@ -1,6 +1,5 @@
 from pygame.math import Vector2 as vec2
 from pygame.draw import circle
-from src.core.tool.draw import draw_text
 from src.core.entity.core.entity import Entity
 import pygame
 
@@ -46,9 +45,6 @@ class Player(Entity):
 
     def draw(self):
         circle(self.display_surface, 'black', self.pos, 10*self.scale)
-
-        draw_text((self.x, self.y), color='black', size=25)
-        draw_text(self.scale, color='black',size=25 ,y=35)
 
     def update(self, scale):
         self.scale = scale

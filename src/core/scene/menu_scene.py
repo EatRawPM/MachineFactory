@@ -8,18 +8,15 @@ class MenuScene(Scene):
         super().__init__()
         self.scene_manager = get_scene('manager')
 
-    def on_enter(self):
-        print('进入主页面')
+    def on_enter(self): ...
 
-    def on_update(self):
-        print('主页面正在运行')
+    def on_update(self): ...
 
     def on_input(self, event):
         if event.type == KEYDOWN:
             self.scene_manager.switch_scene('game')
 
     def on_draw(self):
-        draw_text('主页面绘图')
+        draw_text('按下任意键切换')
 
-    def on_exit(self):
-        print('退出主页面')
+    def on_exit(self): ...
