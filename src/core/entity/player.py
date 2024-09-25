@@ -22,7 +22,10 @@ class Player(Entity):
         self.speed = 2
 
         self.x = 0
+        self.col = 0
+
         self.y = 0
+        self.row = 0
 
         self.scale = 1.0
 

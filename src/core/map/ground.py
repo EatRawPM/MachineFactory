@@ -31,23 +31,28 @@ class Ground(Map):
 
         self.offset = vec2(0, 0)
 
-        self.mouse_world_pos = vec2(0, 0)
+        self.mouse_pos = vec2(0, 0)
+
+        self.col = 0
+        self.row = 0
 
         self.player = Player()
 
     def on_enter(self): ...
 
     def on_draw(self):
+        pygame.draw.circle(self.display_surface, 'green', self.origin, 10 * self.scale)
         if self.is_create:
-            # pygame.draw.circle(self.lines_surface, 'green', self.origin, 10*self.scale)
             self.draw_lines('black')
+            self.block_events('green')
         if self.is_delete:
-            # pygame.draw.circle(self.lines_surface, 'red', self.origin, 10*self.scale)
             self.draw_lines('red')
+            self.block_events('red')
         self.player.draw()
         draw_text(f'x: {self.player.x} y: {self.player.y}', color='black', size=20)
-        draw_text(f'size: {self.scale}', color='black', size=20, y=30)
-        draw_text(f'mouse: {self.mouse_world_pos}', color='black', size=20, y=50)
+        draw_text(f'col: {self.player.col} row: {self.player.row}', color='black', size=20, y=30)
+        draw_text(f'size: {self.scale}', color='black', size=20, y=50)
+        draw_text(f'col: {self.col} row: {self.row}', color='black', size=20, y=70)
 
     def draw_lines(self, color):
         cols = self.width // self.size
@@ -68,18 +73,16 @@ class Ground(Map):
 
         self.display_surface.blit(self.lines_surface, (0, 0))
 
-    def get_world_pos(self, x, y) -> vec2:
+    def get_world_pos(self, distance: vec2):
         scale = 64 / (self.scale * 64)
-
-        distance = (vec2(x, y) - self.origin) * scale
 
         col = int((distance.x + 32) / 64)
         row = int((distance.y + 32) / 64)
 
-        col -= 1 if distance.x < -self.size / 2 else 0
-        row -= 1 if distance.y < -self.size / 2 else 0
+        col -= 1 if distance.x < -64 / 2 else 0
+        row -= 1 if distance.y < -64 / 2 else 0
 
-        return vec2(col, row)
+        return col, row
 
     def on_update(self):
         self.size = int(64 * self.scale)
@@ -89,9 +92,31 @@ class Ground(Map):
 
         self.origin = vec2(self.half_width, self.half_height) + scale_offset
 
-        self.mouse_world_pos = self.get_world_pos(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+        scale = 64 / (self.scale * 64)
+
+        self.mouse_pos = (vec2(pygame.mouse.get_pos()) - self.origin) * scale
+
+        self.col, self.row = self.get_world_pos(self.mouse_pos)
 
         self.player.update(self.scale)
+
+        self.player.col, self.player.row = self.get_world_pos(vec2(self.player.x, self.player.y))
+
+    def block_events(self, color: str | tuple[int, int, int]):
+        def draw_block(color: str | tuple[int, int, int]):
+            x = self.col * self.size + self.origin.x - self.size / 2
+            y = self.row * self.size + self.origin.y - self.size / 2
+
+            surface = pygame.Surface((self.size, self.size))
+            surface.fill(color)
+            surface.set_alpha(30)
+            rect = surface.get_rect()
+            rect.topleft = (x, y)
+            print(self.mouse_pos)
+
+            self.display_surface.blit(surface, rect)
+
+        draw_block(color)
 
     def on_input(self, event):
         if event.type == pygame.KEYDOWN:

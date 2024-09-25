@@ -1,13 +1,21 @@
 from time import time
-
+from src.core.tool.draw import draw_text
 from src.core.scene.core.scene import Scene
 from src.core.scene.core.save_scene import *
 
+import pygame
 
 class RunScene(Scene):
     def __init__(self):
         super().__init__()
         self.scene_manager = get_scene('manager')
+
+        self.display_surface = pygame.display.get_surface()
+        self.width = self.display_surface.get_width()
+        self.height = self.display_surface.get_height()
+
+        self.half_width = self.width / 2
+        self.half_height = self.height / 2
 
         self._time = time()
         self.times = 0
@@ -23,6 +31,9 @@ class RunScene(Scene):
 
     def on_input(self, event): ...
 
-    def on_draw(self): ...
+    def on_draw(self):
+        draw_text('操做提示',x=int(self.half_width - 75), y=int(self.half_height - 200))
+        draw_text('WASD移动',x=int(self.half_width - 75), y=int(self.half_height - 150))
+        draw_text('滚轮缩放',x=int(self.half_width - 75), y=int(self.half_height - 100))
 
     def on_exit(self): ...
