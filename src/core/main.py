@@ -4,9 +4,11 @@ from src.core.scene.game_scene import GameScene
 from src.core.scene.core.scene_manager import SceneManager
 from src.core.scene.core.save_scene import *
 from src.data.assets import icon_image
+from src.data.game.data import data_init
 import sys
 import pygame
 
+data_init()
 save_init()
 
 class App:
