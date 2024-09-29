@@ -21,10 +21,14 @@
 
 ### 使用的Python库
 * PyGame
+* PyGetWindow
 
 ### 安装指令
 ```
 pip install pygame
+```
+```
+pip install pygetwindow
 ```
 #### 快速安装
 
