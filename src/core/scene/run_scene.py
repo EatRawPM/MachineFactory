@@ -37,5 +37,6 @@ class RunScene(Scene):
         draw_text('滚轮缩放',x=int(self.half_width - 75), y=int(self.half_height - 100))
         draw_text('q键删除', x=int(self.half_width - 75), y=int(self.half_height - 50))
         draw_text('e键建造', x=int(self.half_width - 75), y=int(self.half_height))
+        draw_text('esc退出', x=int(self.half_width - 75), y=int(self.half_height + 50))
 
     def on_exit(self): ...

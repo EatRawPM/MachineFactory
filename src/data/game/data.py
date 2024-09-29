@@ -3,6 +3,7 @@ from os.path import join, exists
 from os import mkdir
 
 from src.data.game.settings.create import create_settings
+from src.data.game.settings.settings import settings_init
 
 data_path = join(main_path, 'MachineFactory')
 
@@ -36,3 +37,4 @@ def data_init():
             data()
 
     main_data()
+    settings_init()

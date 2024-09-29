@@ -5,6 +5,7 @@ from src.core.scene.core.scene_manager import SceneManager
 from src.core.scene.core.save_scene import *
 from src.data.assets import icon_image
 from src.data.game.data import data_init
+from src.data.window import full_width, full_height
 import sys
 import pygame
 
@@ -14,7 +15,7 @@ save_init()
 class App:
     def __init__(self):
         pygame.init()
-        pygame.display.set_mode((1280, 720))
+        pygame.display.set_mode((full_width, full_height), pygame.FULLSCREEN)
         pygame.display.set_caption('MachineFactory')
         pygame.display.set_icon(icon_image)
 
@@ -44,6 +45,10 @@ class App:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
             self.scene_manager.on_input(event)
 
     def run(self):

@@ -112,7 +112,6 @@ class Ground(Map):
             surface.set_alpha(30)
             rect = surface.get_rect()
             rect.topleft = (x, y)
-            print(self.mouse_pos)
 
             self.display_surface.blit(surface, rect)
 
