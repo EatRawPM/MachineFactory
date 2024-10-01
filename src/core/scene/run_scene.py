@@ -10,13 +10,6 @@ class RunScene(Scene):
         super().__init__()
         self.scene_manager = get_scene('manager')
 
-        self.display_surface = pygame.display.get_surface()
-        self.width = self.display_surface.get_width()
-        self.height = self.display_surface.get_height()
-
-        self.half_width = self.width / 2
-        self.half_height = self.height / 2
-
         self._time = time()
         self.times = 0
 
@@ -40,3 +33,6 @@ class RunScene(Scene):
         draw_text('esc退出', x=int(self.half_width - 75), y=int(self.half_height + 50))
 
     def on_exit(self): ...
+
+    def update_surface(self):
+        super().update_surface()

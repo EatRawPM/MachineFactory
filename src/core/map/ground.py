@@ -38,16 +38,20 @@ class Ground(Map):
 
         self.player = Player()
 
+        self.block_list = {}
+
     def on_enter(self): ...
 
     def on_draw(self):
-        pygame.draw.circle(self.display_surface, 'green', self.origin, 10 * self.scale)
+
+        self.draw_block()
         if self.is_create:
             self.draw_lines('black')
-            self.block_events('green')
+            self.up_draw_block('green')
         if self.is_delete:
             self.draw_lines('red')
-            self.block_events('red')
+            self.up_draw_block('red')
+        pygame.draw.circle(self.display_surface, 'green', self.origin, 10 * self.scale)
         self.player.draw()
         draw_text(f'x: {self.player.x} y: {self.player.y}', color='black', size=20)
         draw_text(f'col: {self.player.col} row: {self.player.row}', color='black', size=20, y=30)
@@ -102,20 +106,39 @@ class Ground(Map):
 
         self.player.col, self.player.row = self.get_world_pos(vec2(self.player.x, self.player.y))
 
-    def block_events(self, color: str | tuple[int, int, int]):
-        def draw_block(color: str | tuple[int, int, int]):
-            x = self.col * self.size + self.origin.x - self.size / 2
-            y = self.row * self.size + self.origin.y - self.size / 2
+    def up_draw_block(self, color: str | tuple[int, int, int]):
+        x = self.col * self.size + self.origin.x - self.size / 2
+        y = self.row * self.size + self.origin.y - self.size / 2
 
-            surface = pygame.Surface((self.size, self.size))
-            surface.fill(color)
-            surface.set_alpha(30)
-            rect = surface.get_rect()
-            rect.topleft = (x, y)
+        surface = pygame.Surface((self.size, self.size))
+        surface.fill(color)
+        surface.set_alpha(30)
+        rect = surface.get_rect()
+        rect.topleft = (x, y)
 
-            self.display_surface.blit(surface, rect)
+        self.display_surface.blit(surface, rect)
 
-        draw_block(color)
+    def draw_block(self):
+        for pos, ind in self.block_list.items():
+            if ind != 'none':
+                x = pos[0] * self.size + self.origin.x - self.size / 2
+                y = pos[1] * self.size + self.origin.y - self.size / 2
+
+                surface = pygame.Surface((self.size, self.size))
+                surface.fill('yellow')
+                rect = surface.get_rect()
+                rect.topleft = (x, y)
+
+                self.display_surface.blit(surface, rect)
+
+    def add_block(self):
+        x = self.col * self.size + self.origin.x - self.size / 2
+        y = self.row * self.size + self.origin.y - self.size / 2
+
+        self.block_list[(self.col, self.row)] = (x, y)
+
+    def remove_block(self):
+        self.block_list[(self.col, self.row)] = 'none'
 
     def on_input(self, event):
         if event.type == pygame.KEYDOWN:
@@ -133,10 +156,21 @@ class Ground(Map):
                     self.is_create = False
         self.player.input()
         self.scale_event(event)
+        self.mouse_event()
 
     def scale_event(self,event):
         if event.type == pygame.MOUSEWHEEL:
             self.scale += event.y * 0.25
         self.scale = max(0.5, min(self.scale, 2.0))
 
+    def mouse_event(self):
+        if pygame.mouse.get_pressed()[0]:
+            if self.is_create:
+                self.add_block()
+            if self.is_delete:
+                self.remove_block()
+
     def on_exit(self): ...
+
+    def update_surface(self):
+        super().update_surface()

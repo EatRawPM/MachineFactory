@@ -27,3 +27,6 @@ class GameScene(Scene):
 
     def on_exit(self):
         self.ground_map.on_exit()
+
+    def update_surface(self):
+        super().update_surface()

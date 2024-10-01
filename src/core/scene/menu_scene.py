@@ -17,6 +17,9 @@ class MenuScene(Scene):
             self.scene_manager.switch_scene('game')
 
     def on_draw(self):
-        draw_text('按下任意键切换')
+        draw_text('按下任意键切换',size=100,x=self.half_width/8*5, y=self.half_height-50)
 
     def on_exit(self): ...
+
+    def update_surface(self):
+        super().update_surface()

@@ -19,7 +19,7 @@ class Player(Entity):
         self.half_height = self.height / 2
 
         self.direction = vec2(0, 0)
-        self.speed = 2
+        self.speed = 5
 
         self.x = 0
         self.col = 0
@@ -51,8 +51,6 @@ class Player(Entity):
 
     def update(self, scale):
         self.scale = scale
-
-        self.speed = 2 * self.scale
 
         self.x += self.direction.x * self.speed
         self.y += self.direction.y * self.speed

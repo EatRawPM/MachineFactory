@@ -3,6 +3,7 @@ from src.core.scene.menu_scene import MenuScene
 from src.core.scene.game_scene import GameScene
 from src.core.scene.core.scene_manager import SceneManager
 from src.core.scene.core.save_scene import *
+from src.core.tool.draw import draw_text
 from src.data.assets import icon_image
 from src.data.game.data import data_init
 from src.data.window import full_width, full_height
@@ -38,6 +39,7 @@ class App:
         self.clock.tick(60)
         self.surface_display.fill('black')
         self.scene_manager.on_draw()
+        # draw_text(self.clock.get_fps())
         pygame.display.update()
 
     def handle_event(self):
@@ -50,6 +52,9 @@ class App:
                     pygame.quit()
                     sys.exit()
             self.scene_manager.on_input(event)
+
+    def update_surface(self):
+        pass
 
     def run(self):
         self.scene_manager.set_current_scene(get_scene('run'))

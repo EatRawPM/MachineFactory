@@ -15,9 +15,14 @@ class Animation(Image):
         self.timer = timer
         super().__init__(self.screen, self.image, size, x, y)
 
-        self.times = time.time()
+        self.times = 0
 
     def update(self):
+        if time.time() - self.times <= self.timer:
+            return
+
+        self.times = time.time()
+
         self.nowint = 0 if self.nowint == self.maxint else + 1
         self.image = self.images[self.nowint]
 

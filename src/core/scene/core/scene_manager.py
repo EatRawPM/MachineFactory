@@ -36,3 +36,6 @@ class SceneManager(Scene):
 
     def on_exit(self):
         self.current_scene.on_exit()
+
+    def update_surface(self):
+        self.current_scene.update_surface()
