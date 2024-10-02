@@ -1,4 +1,6 @@
 import pygame
+from PyInstaller.utils.hooks.setuptools import pre_safe_import_module
+
 from src.core.map.core.map import Map
 from src.core.entity.player import Player
 from pygame.math import Vector2 as vec2
@@ -20,7 +22,7 @@ class Ground(Map):
         self.half_height = self.height / 2
 
         #模式
-        self.is_create = False
+        self.is_create = True
         self.is_delete = False
 
         self.scale = 1.0
@@ -119,10 +121,10 @@ class Ground(Map):
         self.display_surface.blit(surface, rect)
 
     def draw_block(self):
-        for pos, ind in self.block_list.items():
-            if ind != 'none':
-                x = pos[0] * self.size + self.origin.x - self.size / 2
-                y = pos[1] * self.size + self.origin.y - self.size / 2
+        def create():
+            if state != 'null':
+                x = col * self.size + self.origin.x - self.size / 2
+                y = row * self.size + self.origin.y - self.size / 2
 
                 surface = pygame.Surface((self.size, self.size))
                 surface.fill('yellow')
@@ -131,14 +133,36 @@ class Ground(Map):
 
                 self.display_surface.blit(surface, rect)
 
-    def add_block(self):
-        x = self.col * self.size + self.origin.x - self.size / 2
-        y = self.row * self.size + self.origin.y - self.size / 2
+        for keys, values in self.block_list.items():
+            col = keys[0]
+            row = keys[1]
+            state = ''
+            for key, value in values.items():
+                match key:
+                    case 'state':
+                        state = value
 
-        self.block_list[(self.col, self.row)] = (x, y)
+            create()
+
+    def add_block(self):
+        cell = (self.col, self.row)
+        def read_dirt():
+            if not self.block_list[cell]:
+                self.block_list[cell] = {'state': 'Cell'}
+            else:
+                pass
+
+        if cell in self.block_list:
+            read_dirt()
+        else:
+            self.block_list[cell] = {}
+            read_dirt()
 
     def remove_block(self):
-        self.block_list[(self.col, self.row)] = 'none'
+        cell = (self.col, self.row)
+
+        if cell in self.block_list:
+            self.block_list[cell] = {'state': 'null'}
 
     def on_input(self, event):
         if event.type == pygame.KEYDOWN:

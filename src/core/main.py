@@ -16,7 +16,7 @@ save_init()
 class App:
     def __init__(self):
         pygame.init()
-        pygame.display.set_mode((full_width, full_height), pygame.FULLSCREEN)
+        pygame.display.set_mode((1280, 720))
         pygame.display.set_caption('MachineFactory')
         pygame.display.set_icon(icon_image)
 
@@ -57,7 +57,7 @@ class App:
         pass
 
     def run(self):
-        self.scene_manager.set_current_scene(get_scene('run'))
+        self.scene_manager.set_current_scene(get_scene('game'))
         self.scene_manager.on_enter()
         while True:
             self.update()
